@@ -32,13 +32,13 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        solid ? "bg-ink/95 border-b border-line" : "bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        solid ? "glass shadow-[0_1px_0_0_rgba(19,26,36,0.04),0_8px_30px_-15px_rgba(19,26,36,0.15)]" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 md:px-12">
-        <Link href="/" className="font-display text-lg tracking-[0.08em] text-parchment">
-          RBI <span className="text-gold">Solutions</span>
+        <Link href="/" className="font-display text-lg tracking-[0.08em] text-ink">
+          RBI <span className="text-brand">Solutions</span>
         </Link>
 
         <div className="hidden items-center gap-10 md:flex">
@@ -46,7 +46,7 @@ export default function Nav() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm text-parchment-dim transition-colors hover:text-gold"
+              className="text-sm text-ink-dim transition-colors hover:text-brand"
             >
               {l.label}
             </a>
@@ -65,7 +65,7 @@ export default function Nav() {
         <button
           aria-label="Toggle menu"
           aria-expanded={open}
-          className="flex h-10 w-10 items-center justify-center text-parchment md:hidden"
+          className="flex h-10 w-10 items-center justify-center text-ink md:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           <span className="relative block h-4 w-5">
@@ -83,14 +83,14 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div className="border-t border-line bg-ink px-6 py-6 md:hidden">
+        <div className="border-t border-line bg-paper px-6 py-6 md:hidden">
           <div className="flex flex-col gap-5">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="text-base text-parchment-dim hover:text-gold"
+                className="text-base text-ink-dim hover:text-brand"
               >
                 {l.label}
               </a>

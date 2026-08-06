@@ -14,7 +14,39 @@ import { getGsap } from "@/lib/gsap";
  */
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    getGsap();
+    const { ScrollTrigger } = getGsap();
+
+    // Passport cover/hero photos load asynchronously and can shift page
+    // layout well after each PassportCard's ScrollTrigger first calculates
+    // its "center center" trigger position — without a refresh, those
+    // positions go stale and the reveal animation never fires. Refresh once
+    // everything (including images) has actually loaded, and again after
+    // any late layout shift settles.
+    let debounceId: ReturnType<typeof setTimeout>;
+    const refresh = () => {
+      clearTimeout(debounceId);
+      debounceId = setTimeout(() => ScrollTrigger.refresh(), 150);
+    };
+
+    if (document.readyState === "complete") {
+      refresh();
+    } else {
+      window.addEventListener("load", refresh);
+    }
+
+    const images = Array.from(document.images);
+    const pending = images.filter((img) => !img.complete);
+    pending.forEach((img) => img.addEventListener("load", refresh, { once: true }));
+
+    const resizeObserver = new ResizeObserver(() => refresh());
+    resizeObserver.observe(document.body);
+
+    return () => {
+      clearTimeout(debounceId);
+      window.removeEventListener("load", refresh);
+      pending.forEach((img) => img.removeEventListener("load", refresh));
+      resizeObserver.disconnect();
+    };
   }, []);
 
   return <>{children}</>;

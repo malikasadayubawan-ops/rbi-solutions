@@ -29,17 +29,17 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative bg-ink px-6 py-28 md:px-14"
+      className="relative bg-paper px-6 py-28 md:px-14"
     >
       <div className="mx-auto mb-20 max-w-2xl text-center">
-        <p className="text-xs uppercase tracking-[0.35em] text-gold">The Process</p>
-        <h2 className="mt-6 text-balance font-display text-3xl font-light italic text-parchment md:text-5xl">
+        <p className="text-xs uppercase tracking-[0.35em] text-brand">The Process</p>
+        <h2 className="mt-6 text-balance font-display text-3xl font-light italic text-ink md:text-5xl">
           How It Works
         </h2>
       </div>
 
       <div className="relative mx-auto max-w-3xl">
-        <div className="absolute left-6 top-2 bottom-2 w-px bg-gradient-to-b from-gold via-gold-dim to-transparent md:left-1/2 md:-translate-x-1/2" />
+        <div className="absolute left-6 top-2 bottom-2 w-px bg-gradient-to-b from-brand via-brand-dim to-transparent md:left-1/2 md:-translate-x-1/2" />
 
         <div className="flex flex-col gap-16 md:gap-20">
           {steps.map((step, i) => (
@@ -54,17 +54,17 @@ export default function HowItWorks() {
               }`}
             >
               <div
-                className={`absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-gold bg-card font-mono-figures text-sm text-gold md:top-0 ${
+                className={`absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-brand bg-card font-mono-figures text-sm text-brand md:top-0 ${
                   i % 2 === 0 ? "md:-right-6 md:left-auto" : "md:-left-6"
                 }`}
               >
                 {step.n}
               </div>
               <div>
-                <h3 className="font-display text-xl italic text-parchment md:text-2xl">
+                <h3 className="font-display text-xl italic text-ink md:text-2xl">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-parchment-dim md:text-base">
+                <p className="mt-3 text-sm leading-relaxed text-ink-dim md:text-base">
                   {step.body}
                 </p>
               </div>

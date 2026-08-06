@@ -9,7 +9,7 @@ import Consultation from "@/components/consultation/Consultation";
 
 export default function Home() {
   return (
-    <main id="main-content" tabIndex={-1} className="relative bg-ink focus:outline-none">
+    <main id="main-content" tabIndex={-1} className="relative bg-paper focus:outline-none">
       <Hero />
       <PassportStory />
       <WorldMap />

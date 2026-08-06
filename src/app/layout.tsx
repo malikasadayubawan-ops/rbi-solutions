@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0d10",
+  themeColor: "#f7f8fa",
   width: "device-width",
   initialScale: 1,
 };
@@ -86,7 +86,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${plexMono.variable} h-full`}
     >
-      <body className="min-h-full bg-ink text-parchment antialiased">
+      <body className="min-h-full bg-paper text-ink antialiased">
         <Script
           id="ld-json"
           type="application/ld+json"
@@ -94,11 +94,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         <a
           href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-ink transition-transform focus:translate-y-0 focus-visible:outline-none"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-paper transition-transform focus:translate-y-0 focus-visible:outline-none"
         >
           Skip to main content
         </a>
-        <div className="grain-overlay" />
         <SmoothScroll>
           <Nav />
           {children}

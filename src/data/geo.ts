@@ -19,11 +19,9 @@ export const coordinates: Record<string, [number, number]> = {
   georgia: [41.7, 44.8],
 };
 
-export function latLonToVector3(lat: number, lon: number, radius: number): [number, number, number] {
-  const phi = ((90 - lat) * Math.PI) / 180;
-  const theta = ((lon + 180) * Math.PI) / 180;
-  const x = -radius * Math.sin(phi) * Math.cos(theta);
-  const z = radius * Math.sin(phi) * Math.sin(theta);
-  const y = radius * Math.cos(phi);
-  return [x, y, z];
+/** Equirectangular projection onto a 1000x500 viewBox for the flat map. */
+export function latLonToXY(lat: number, lon: number): [number, number] {
+  const x = ((lon + 180) / 360) * 1000;
+  const y = ((90 - lat) / 180) * 500;
+  return [x, y];
 }

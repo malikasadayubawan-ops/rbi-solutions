@@ -11,7 +11,7 @@ const label = (kind: Country["programKind"]) =>
   kind === "citizenship" ? "CITIZENSHIP GRANTED" : "RESIDENCY APPROVED";
 
 export default function Stamp({ country, className }: StampProps) {
-  const ink = country.accent;
+  const stampColor = country.accent;
   const id = `stamp-arc-${country.slug}`;
 
   if (country.stampShape === "circle") {
@@ -20,9 +20,9 @@ export default function Stamp({ country, className }: StampProps) {
         <defs>
           <path id={id} d="M 100,100 m -72,0 a 72,72 0 1,1 144,0 a 72,72 0 1,1 -144,0" />
         </defs>
-        <circle cx="100" cy="100" r="92" fill="none" stroke={ink} strokeWidth="2.5" opacity="0.9" />
-        <circle cx="100" cy="100" r="80" fill="none" stroke={ink} strokeWidth="1" opacity="0.6" />
-        <text fill={ink} fontSize="12.5" letterSpacing="3" fontFamily="var(--font-mono)">
+        <circle cx="100" cy="100" r="92" fill="none" stroke={stampColor} strokeWidth="2.5" opacity="0.9" />
+        <circle cx="100" cy="100" r="80" fill="none" stroke={stampColor} strokeWidth="1" opacity="0.6" />
+        <text fill={stampColor} fontSize="12.5" letterSpacing="3" fontFamily="var(--font-mono)">
           <textPath href={`#${id}`} startOffset="2%">
             {label(country.programKind)} • {country.name.toUpperCase()} •
           </textPath>
@@ -31,7 +31,7 @@ export default function Stamp({ country, className }: StampProps) {
           x="100"
           y="94"
           textAnchor="middle"
-          fill={ink}
+          fill={stampColor}
           fontSize="15"
           fontFamily="var(--font-display)"
           fontStyle="italic"
@@ -42,7 +42,7 @@ export default function Stamp({ country, className }: StampProps) {
           x="100"
           y="114"
           textAnchor="middle"
-          fill={ink}
+          fill={stampColor}
           fontSize="9"
           letterSpacing="2"
           fontFamily="var(--font-mono)"
@@ -64,7 +64,7 @@ export default function Stamp({ country, className }: StampProps) {
     <div
       className={className}
       style={{
-        border: `2.5px solid ${ink}`,
+        border: `2.5px solid ${stampColor}`,
         clipPath: clip !== "none" ? clip : undefined,
         borderRadius: clip === "none" ? 8 : undefined,
       }}
@@ -72,13 +72,13 @@ export default function Stamp({ country, className }: StampProps) {
       <div className="flex h-full w-full flex-col items-center justify-center gap-1 p-4 text-center">
         <span
           className="font-display text-sm italic"
-          style={{ color: ink }}
+          style={{ color: stampColor }}
         >
           RBI Solutions
         </span>
         <span
           className="font-mono-figures text-[9px] tracking-[0.15em]"
-          style={{ color: ink }}
+          style={{ color: stampColor }}
         >
           {label(country.programKind)}
         </span>

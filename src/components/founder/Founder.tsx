@@ -22,7 +22,7 @@ export default function Founder() {
     <section
       id="founder"
       ref={sectionRef}
-      className="relative bg-ink px-6 py-28 md:px-14"
+      className="relative bg-paper px-6 py-28 md:px-14"
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -31,7 +31,7 @@ export default function Founder() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-16"
       >
-        <div className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-lg border border-gold-dim/50 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.8)]">
+        <div className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-lg border border-brand-dim/50 shadow-[0_30px_70px_-25px_rgba(19,26,36,0.3)]">
           <div className="relative aspect-[3/4] w-full overflow-hidden">
             <motion.div style={{ y: portraitY }} className="absolute inset-[-6%]">
               {founder.portraitSrc ? (
@@ -46,10 +46,10 @@ export default function Founder() {
                 <div
                   className="flex h-full w-full items-center justify-center"
                   style={{
-                    background: "linear-gradient(155deg, #191d23 0%, #0b0d10 100%)",
+                    background: "linear-gradient(155deg, #eef1f5 0%, #dde6ed 100%)",
                   }}
                 >
-                  <span className="font-display text-6xl italic text-gold-dim">
+                  <span className="font-display text-6xl italic text-brand">
                     {initials}
                   </span>
                 </div>
@@ -59,21 +59,21 @@ export default function Founder() {
         </div>
 
         <div className="text-center md:text-left">
-          <p className="text-xs uppercase tracking-[0.35em] text-gold">Leadership</p>
-          <h2 className="mt-6 text-balance font-display text-3xl font-light italic text-parchment md:text-5xl">
+          <p className="text-xs uppercase tracking-[0.35em] text-brand">Leadership</p>
+          <h2 className="mt-6 text-balance font-display text-3xl font-light italic text-ink md:text-5xl">
             Meet the Founder
           </h2>
 
-          <div className="gold-rule mx-auto mt-8 max-w-[160px] md:mx-0" />
+          <div className="brand-rule mx-auto mt-8 max-w-[160px] md:mx-0" />
 
-          <p className="mt-8 font-display text-3xl italic text-gold md:text-4xl">
+          <p className="mt-8 font-display text-3xl italic text-brand md:text-4xl">
             {founder.name}
           </p>
-          <p className="mt-1 text-xs uppercase tracking-[0.3em] text-gold-dim">
+          <p className="mt-1 text-xs uppercase tracking-[0.3em] text-brand-dim">
             {founder.title}
           </p>
 
-          <p className="mt-6 text-sm leading-relaxed text-parchment-dim md:text-base">
+          <p className="mt-6 text-sm leading-relaxed text-ink-dim md:text-base">
             {founder.bio}
           </p>
         </div>

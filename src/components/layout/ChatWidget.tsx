@@ -6,7 +6,7 @@ import { CONTACT_EMAIL } from "@/lib/constants";
 import Button from "@/components/ui/Button";
 
 const inputClasses =
-  "w-full rounded-md border border-line bg-ink px-3.5 py-2.5 text-sm text-parchment placeholder:text-parchment-dim/50 transition-colors focus:border-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-gold";
+  "w-full rounded-md border border-line bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-dim/50 transition-colors focus:border-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-brand";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -46,14 +46,14 @@ export default function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-[calc(100%+16px)] right-0 w-[calc(100vw-3rem)] max-w-[340px] rounded-lg border border-line bg-card p-5 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]"
+            className="absolute bottom-[calc(100%+16px)] right-0 w-[calc(100vw-3rem)] max-w-[340px] rounded-lg border border-line bg-card p-5 shadow-[0_24px_60px_-20px_rgba(19,26,36,0.3)]"
             role="dialog"
             aria-label="Quick message"
           >
             <div className="mb-4 flex items-start justify-between">
               <div>
-                <p className="font-display text-lg italic text-parchment">Start a conversation</p>
-                <p className="mt-1 text-xs text-parchment-dim">
+                <p className="font-display text-lg italic text-ink">Start a conversation</p>
+                <p className="mt-1 text-xs text-ink-dim">
                   We typically respond within one business day.
                 </p>
               </div>
@@ -61,7 +61,7 @@ export default function ChatWidget() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close"
-                className="text-parchment-dim transition-colors hover:text-gold"
+                className="text-ink-dim transition-colors hover:text-brand"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M6 6L18 18M18 6L6 18" strokeLinecap="round" />
@@ -121,7 +121,7 @@ export default function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close chat" : "Open chat"}
         aria-expanded={open}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-gold text-ink shadow-[0_12px_30px_-8px_rgba(198,161,91,0.6)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-paper shadow-[0_12px_30px_-8px_rgba(42,92,138,0.5)] transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
       >
         {open ? (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">

@@ -1,14 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { getGsap } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
-
-const GlobeCanvas = dynamic(() => import("@/components/globe/GlobeCanvas"), {
-  ssr: false,
-});
+import HeroWorldMap from "./HeroWorldMap";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,26 +32,37 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden bg-ink"
+      className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden bg-paper"
     >
-      <motion.div
-        ref={globeWrapRef}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        <GlobeCanvas
-          autoRotate
-          className="h-[130vw] w-[130vw] max-h-[900px] max-w-[900px] opacity-90 md:h-[70vw] md:w-[70vw]"
-        />
-      </motion.div>
+      {/*
+        Two separate nodes on purpose: GSAP's scroll-scrubbed parallax and
+        Framer's one-shot entrance fade both animate `opacity` via inline
+        styles, and letting them share a single element means whichever
+        library last wrote `style.opacity` wins — at rest that was GSAP's
+        captured scroll-start value (0), permanently hiding the map.
+      */}
+      <div ref={globeWrapRef} className="absolute inset-0 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+          className="aspect-[2/1] w-[145vw] max-w-[1500px] md:w-[92vw]"
+        >
+          <HeroWorldMap />
+        </motion.div>
+      </div>
 
+      {/*
+        Inverted from a typical vignette: solid near the center (where the
+        headline sits, so text stays crisp against a flat backdrop) fading
+        to transparent toward the frame edges, where the map reads clearly
+        as ambient context rather than a wash directly under the copy.
+      */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 35%, #0b0d10 78%)",
+            "radial-gradient(ellipse 62% 58% at center, #f7f8fa 0%, #f7f8fa 40%, transparent 82%)",
         }}
       />
 
@@ -64,7 +71,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6 text-xs uppercase tracking-[0.35em] text-gold"
+          className="mb-6 text-xs uppercase tracking-[0.35em] text-brand"
         >
           Investment Migration Advisory
         </motion.p>
@@ -73,18 +80,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="text-balance font-display text-4xl font-light leading-[1.1] text-parchment sm:text-6xl md:text-7xl"
+          className="text-balance font-display text-4xl font-light leading-[1.1] text-ink sm:text-6xl md:text-7xl"
         >
           Global Residency &amp;
           <br />
-          <span className="italic text-gold">Citizenship</span> Advisory
+          <span className="italic text-brand">Citizenship</span> Advisory
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.6 }}
-          className="mt-8 max-w-xl text-balance text-base leading-relaxed text-parchment-dim md:text-lg"
+          className="mt-8 max-w-xl text-balance text-base leading-relaxed text-ink-dim md:text-lg"
         >
           Helping investors and families secure international residency
           through carefully selected investment and immigration programs.
@@ -111,8 +118,8 @@ export default function Hero() {
         transition={{ duration: 1, delay: 1.4 }}
         className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-center"
       >
-        <div className="mx-auto h-10 w-px bg-gradient-to-b from-gold to-transparent" />
-        <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-parchment-dim">
+        <div className="mx-auto h-10 w-px bg-gradient-to-b from-brand to-transparent" />
+        <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-ink-dim">
           Scroll
         </p>
       </motion.div>

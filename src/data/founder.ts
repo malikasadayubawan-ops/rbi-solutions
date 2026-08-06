@@ -11,4 +11,5 @@ export const founder: Founder = {
   name: "Malik Asad",
   title: "Founder",
   bio: "Malik Asad founded RBI Solutions with the vision of helping investors and families navigate global residency and citizenship opportunities through transparent advice and carefully selected investment pathways. Rather than promoting a single destination, the firm focuses on understanding each client's objectives and recommending the most suitable long-term solution through its international network of trusted professionals and partners.",
+  portraitSrc: "/founder/malik-asad.jpg",
 };

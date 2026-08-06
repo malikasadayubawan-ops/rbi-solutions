@@ -47,6 +47,11 @@ export interface Country {
    * artwork without touching any component code.
    */
   passportImage?: string;
+  /**
+   * Path to a real hero photo/map for this country under /public. When
+   * omitted, falls back to the generative CountryIllustration scene.
+   */
+  heroImage?: string;
   /** Per-country call to action shown on its passport. Defaults to the
    * global "Book Consultation" CTA when omitted. */
   cta?: CountryCTA;
@@ -54,6 +59,25 @@ export interface Country {
    * addition to (not instead of) the site-wide footer disclaimer. Use this
    * for programs whose terms are still in flux. */
   legalDisclaimer?: string;
+  /** RBI Solutions' own advisory/service fee, shown distinctly from the
+   * government investment threshold when a program has one (e.g. a
+   * recognition-based visa with no government minimum). */
+  serviceFee?: InvestmentRoute;
+  /** Henley Passport Index-style rank of this country's own passport, where
+   * relevant (citizenship outcomes, or residency with a citizenship path).
+   * Omitted for residency-only programs where the client never acquires
+   * this passport. */
+  passportRank?: number;
+  /** ISO 3166-1 alpha-3 code, used to look up this country's real outline
+   * shape from geographic boundary data for the passport-side map. */
+  isoA3?: string;
+  /**
+   * SVG path "d" data for this country's real geographic outline, sized to
+   * `OUTLINE_VIEWBOX` in src/lib/countryOutline.ts. Computed server-side
+   * (see PassportStory.tsx) from `isoA3` — never authored by hand — and
+   * used as the hero-panel fallback when no `heroImage` is set.
+   */
+  outlinePath?: string;
 }
 
 export interface CompareRow {

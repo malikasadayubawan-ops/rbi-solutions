@@ -69,11 +69,11 @@ function SceneLines({ scene }: { scene: Country["scene"] }) {
 
 export default function CountryIllustration({ scene, accent }: Props) {
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden bg-card-raised">
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse 90% 60% at 50% 100%, ${accent}33 0%, transparent 65%), linear-gradient(180deg, #0b0d10 0%, #0b0d10 55%, ${accent}22 100%)`,
+          background: `radial-gradient(ellipse 90% 60% at 50% 100%, ${accent}22 0%, transparent 65%), linear-gradient(180deg, #ffffff 0%, #f7f8fa 55%, ${accent}18 100%)`,
         }}
       />
       <div className="absolute inset-x-0 bottom-0 h-[55%]" style={{ color: accent }}>
@@ -83,7 +83,7 @@ export default function CountryIllustration({ scene, accent }: Props) {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 70% 55% at 50% 45%, transparent 0%, #0b0d10 85%)",
+            "radial-gradient(ellipse 70% 55% at 50% 45%, transparent 0%, rgba(255,255,255,0.4) 85%)",
         }}
       />
     </div>
