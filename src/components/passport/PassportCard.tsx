@@ -37,7 +37,7 @@ export default function PassportCard({ country, index, total }: PassportCardProp
           trigger: section,
           start: "top top",
           end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: 0.7,
+          scrub: 0.2,
           pin: true,
           anticipatePin: 1,
         },

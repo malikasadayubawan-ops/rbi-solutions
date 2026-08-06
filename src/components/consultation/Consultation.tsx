@@ -19,7 +19,7 @@ export default function Consultation() {
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="relative mx-auto max-w-2xl"
       >
         <p className="text-xs uppercase tracking-[0.35em] text-gold">By Appointment Only</p>
