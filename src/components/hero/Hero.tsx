@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { getGsap } from "@/lib/gsap";
+import Button from "@/components/ui/Button";
 
 const GlobeCanvas = dynamic(() => import("@/components/globe/GlobeCanvas"), {
   ssr: false,
@@ -37,15 +38,18 @@ export default function Hero() {
       ref={sectionRef}
       className="relative flex h-[100svh] w-full items-center justify-center overflow-hidden bg-ink"
     >
-      <div
+      <motion.div
         ref={globeWrapRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.4, ease: "easeOut" }}
         className="absolute inset-0 flex items-center justify-center"
       >
         <GlobeCanvas
           autoRotate
           className="h-[130vw] w-[130vw] max-h-[900px] max-w-[900px] opacity-90 md:h-[70vw] md:w-[70vw]"
         />
-      </div>
+      </motion.div>
 
       <div
         className="pointer-events-none absolute inset-0"
@@ -92,18 +96,12 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.85 }}
           className="mt-10 flex flex-col gap-4 sm:flex-row"
         >
-          <a
-            href="#programs"
-            className="rounded-full bg-gold px-8 py-3.5 text-sm font-medium text-ink transition-transform hover:scale-[1.03]"
-          >
+          <Button href="#programs" variant="solid" size="md">
             Explore Programs
-          </a>
-          <a
-            href="#consultation"
-            className="rounded-full border border-gold-dim px-8 py-3.5 text-sm text-parchment transition-colors hover:border-gold hover:text-gold"
-          >
+          </Button>
+          <Button href="#consultation" variant="outline" size="md">
             Book Consultation
-          </a>
+          </Button>
         </motion.div>
       </div>
 

@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import type { Country } from "@/types/country";
 import { getGsap } from "@/lib/gsap";
 import { formatFigure } from "@/lib/utils";
 import CountryIllustration from "./CountryIllustration";
 import Stamp from "./Stamp";
+
+const DEFAULT_CTA = { label: "Request Details", href: "#consultation" };
 
 interface PassportCardProps {
   country: Country;
@@ -28,19 +31,25 @@ export default function PassportCard({ country, index, total }: PassportCardProp
       const items = insideRef.current?.querySelectorAll(".reveal-item");
 
       gsap.set(coverRef.current, { rotateY: 0 });
-      gsap.set(passportRef.current, { xPercent: 34, opacity: 0, rotateZ: 5, scale: 0.92 });
-      if (items) gsap.set(items, { opacity: 0, y: 14 });
-      gsap.set(stampRef.current, { opacity: 0, scale: 2.2, rotate: -18 });
+      gsap.set(passportRef.current, { xPercent: 22, opacity: 0, rotateZ: 3, scale: 0.95 });
+      if (items) gsap.set(items, { opacity: 0, y: 10 });
+      gsap.set(stampRef.current, { opacity: 0, scale: 1.8, rotate: -14 });
 
+      const setWillChange = (on: boolean) => {
+        const value = on ? "transform" : "auto";
+        if (passportRef.current) passportRef.current.style.willChange = value;
+        if (coverRef.current) coverRef.current.style.willChange = value;
+      };
+
+      // No pin, no scrub: the passport plays a short, fixed-duration reveal
+      // once when it enters the viewport, and reverses on the way back up.
+      // Scroll speed and animation speed are fully decoupled, so a normal
+      // scroll/wheel gesture is never held hostage by the animation.
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 2.6}`,
-          scrub: 0.2,
-          pin: true,
-          anticipatePin: 1,
-        },
+        paused: true,
+        onStart: () => setWillChange(true),
+        onReverseComplete: () => setWillChange(false),
+        onComplete: () => setWillChange(false),
       });
 
       tl.to(passportRef.current, {
@@ -48,31 +57,36 @@ export default function PassportCard({ country, index, total }: PassportCardProp
         opacity: 1,
         rotateZ: 0,
         scale: 1,
-        duration: 1,
+        duration: 0.45,
         ease: "power2.out",
       })
         .to(
           coverRef.current,
-          { rotateY: -155, duration: 1.15, ease: "power2.inOut" },
-          "-=0.15",
+          { rotateY: -155, duration: 0.5, ease: "power2.inOut" },
+          "-=0.2",
         )
         .to(
           items ?? [],
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out" },
-          "-=0.75",
+          { opacity: 1, y: 0, duration: 0.3, stagger: 0.03, ease: "power2.out" },
+          "-=0.3",
         )
         .to(
           stampRef.current,
-          { opacity: 1, scale: 1, rotate: -8, duration: 0.55, ease: "back.out(1.8)" },
-          "-=0.15",
-        )
-        .to({}, { duration: 0.5 })
-        .to(coverRef.current, { rotateY: 0, duration: 0.8, ease: "power2.inOut" }, "+=0.1")
-        .to(
-          passportRef.current,
-          { xPercent: -34, opacity: 0, rotateZ: -5, scale: 0.92, duration: 0.9, ease: "power2.in" },
-          "<",
+          { opacity: 1, scale: 1, rotate: -8, duration: 0.3, ease: "back.out(1.8)" },
+          "-=0.1",
         );
+
+      // Stays fully closed while the card is entering the screen; the
+      // reveal only begins once the passport is roughly centered (its own
+      // center crossing the viewport's center), and it closes again — both
+      // if the user continues on to the next country, or scrolls back up.
+      ScrollTrigger.create({
+        trigger: section,
+        start: "center center",
+        end: "center top",
+        toggleActions: "play reverse play reverse",
+        animation: tl,
+      });
     }, sectionRef);
 
     return () => {
@@ -88,6 +102,7 @@ export default function PassportCard({ country, index, total }: PassportCardProp
       ref={sectionRef}
       id={`country-${country.slug}`}
       className="relative h-[100svh] w-full overflow-hidden bg-ink"
+      style={{ contentVisibility: "auto", containIntrinsicSize: "100vw 100svh" }}
     >
       <CountryIllustration scene={country.scene} accent={country.accent} />
 
@@ -116,7 +131,7 @@ export default function PassportCard({ country, index, total }: PassportCardProp
           {/* inside spread */}
           <div
             ref={insideRef}
-            className="absolute inset-0 flex flex-col justify-between rounded-md border border-line bg-card p-6 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] md:p-9"
+            className="absolute inset-0 flex flex-col justify-between rounded-md border border-line bg-card p-6 shadow-[0_20px_40px_-16px_rgba(0,0,0,0.7)] md:p-9"
           >
             <div className="reveal-item flex items-start justify-between">
               <div>
@@ -175,6 +190,20 @@ export default function PassportCard({ country, index, total }: PassportCardProp
               ))}
             </ul>
 
+            <div className="reveal-item flex flex-col items-start gap-2 pr-16">
+              <a
+                href={(country.cta ?? DEFAULT_CTA).href}
+                className="text-xs font-medium text-gold underline decoration-gold-dim underline-offset-4 transition-colors hover:text-gold-bright md:text-sm"
+              >
+                {(country.cta ?? DEFAULT_CTA).label} →
+              </a>
+              {country.legalDisclaimer && (
+                <p className="text-[10px] italic leading-snug text-parchment-dim/60">
+                  {country.legalDisclaimer}
+                </p>
+              )}
+            </div>
+
             <div
               ref={stampRef}
               className="pointer-events-none absolute -bottom-4 -right-4 h-24 w-24 md:h-28 md:w-28"
@@ -189,32 +218,66 @@ export default function PassportCard({ country, index, total }: PassportCardProp
             className="absolute inset-0 origin-left rounded-md"
             style={{ transformStyle: "preserve-3d" }}
           >
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-between rounded-md border border-gold-dim/60 p-7 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.8)]"
-              style={{
-                background: `linear-gradient(155deg, ${country.accent} 0%, #0e1015 115%)`,
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <div className="w-full text-center">
-                <p className="text-[10px] uppercase tracking-[0.4em] text-parchment/70">
-                  {country.programKind === "citizenship"
-                    ? "Citizenship Dossier"
-                    : "Residency Dossier"}
-                </p>
+            {country.passportImage ? (
+              <div
+                className="absolute inset-0 overflow-hidden rounded-md border border-gold-dim/60 shadow-[0_16px_36px_-14px_rgba(0,0,0,0.8)]"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <Image
+                  src={country.passportImage}
+                  alt={`${country.name} passport cover`}
+                  fill
+                  sizes="(max-width: 768px) 340px, 400px"
+                  className="object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(0deg, rgba(11,13,16,0.85) 0%, rgba(11,13,16,0) 30%, rgba(11,13,16,0) 78%, rgba(11,13,16,0.35) 100%)",
+                  }}
+                />
+                <div className="absolute inset-x-0 top-0 pt-4 text-center">
+                  <p className="text-[9px] uppercase tracking-[0.35em] text-parchment/80">
+                    {country.programKind === "citizenship"
+                      ? "Citizenship Dossier"
+                      : "Residency Dossier"}
+                  </p>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 pb-4 text-center">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
+                    RBI Solutions
+                  </p>
+                </div>
               </div>
-              <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/70 md:h-20 md:w-20">
-                <span className="font-display text-xl italic text-gold md:text-2xl">
-                  {country.name.slice(0, 1)}
-                </span>
+            ) : (
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-between rounded-md border border-gold-dim/60 p-7 shadow-[0_16px_36px_-14px_rgba(0,0,0,0.8)]"
+                style={{
+                  background: `linear-gradient(155deg, ${country.accent} 0%, #0e1015 115%)`,
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <div className="w-full text-center">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-parchment/70">
+                    {country.programKind === "citizenship"
+                      ? "Citizenship Dossier"
+                      : "Residency Dossier"}
+                  </p>
+                </div>
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gold/70 md:h-20 md:w-20">
+                  <span className="font-display text-xl italic text-gold md:text-2xl">
+                    {country.name.slice(0, 1)}
+                  </span>
+                </div>
+                <div className="text-center">
+                  <p className="font-display text-lg text-parchment md:text-xl">{country.name}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-gold-dim">
+                    RBI Solutions
+                  </p>
+                </div>
               </div>
-              <div className="text-center">
-                <p className="font-display text-lg text-parchment md:text-xl">{country.name}</p>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-gold-dim">
-                  RBI Solutions
-                </p>
-              </div>
-            </div>
+            )}
 
             <div
               className="absolute inset-0 rounded-md border border-gold-dim/40"

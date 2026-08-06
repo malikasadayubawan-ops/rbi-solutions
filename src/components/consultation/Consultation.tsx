@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { CONTACT_EMAIL } from "@/lib/constants";
+import InquiryForm from "./InquiryForm";
 
 export default function Consultation() {
   return (
@@ -31,12 +33,17 @@ export default function Consultation() {
           your goals. No obligation, no generic pitch — just a clear view of
           which programs genuinely fit your situation.
         </p>
-        <a
-          href="mailto:advisory@rbisolutions.com?subject=Private%20Consultation%20Request"
-          className="mt-10 inline-block rounded-full bg-gold px-10 py-4 text-sm font-medium text-ink transition-transform hover:scale-[1.03]"
-        >
-          Request a Consultation
-        </a>
+
+        <div className="mt-12 rounded-lg border border-line bg-card p-6 text-left shadow-[0_20px_50px_-24px_rgba(0,0,0,0.7)] md:p-10">
+          <InquiryForm />
+        </div>
+
+        <p className="mt-8 text-sm text-parchment-dim">
+          Prefer email directly?{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-gold hover:text-gold-bright">
+            {CONTACT_EMAIL}
+          </a>
+        </p>
       </motion.div>
     </section>
   );

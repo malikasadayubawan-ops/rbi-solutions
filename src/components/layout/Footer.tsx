@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from "@/lib/constants";
+
 export default function Footer() {
   return (
     <footer className="border-t border-line bg-ink px-6 pb-10 pt-16 md:px-12">
@@ -22,6 +24,8 @@ export default function Footer() {
               <li><a href="#programs" className="hover:text-gold">Programs</a></li>
               <li><a href="#how-it-works" className="hover:text-gold">How It Works</a></li>
               <li><a href="#compare" className="hover:text-gold">Compare Countries</a></li>
+              <li><a href="#presence" className="hover:text-gold">Global Presence</a></li>
+              <li><a href="#founder" className="hover:text-gold">About the Founder</a></li>
               <li><a href="#consultation" className="hover:text-gold">Book Consultation</a></li>
             </ul>
           </div>
@@ -29,7 +33,7 @@ export default function Footer() {
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-gold-dim">Firm</p>
             <ul className="mt-4 space-y-3 text-sm text-parchment-dim">
-              <li><a href="mailto:advisory@rbisolutions.com" className="hover:text-gold">advisory@rbisolutions.com</a></li>
+              <li><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-gold">{CONTACT_EMAIL}</a></li>
               <li className="text-parchment-dim">By appointment only</li>
             </ul>
           </div>

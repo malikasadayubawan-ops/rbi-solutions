@@ -5,6 +5,9 @@ import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
+import ChatWidget from "@/components/layout/ChatWidget";
+import { countries } from "@/data/countries";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/constants";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -27,16 +30,13 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://www.rbisolutions.com";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "RBI Solutions — Global Residency & Citizenship Advisory",
     template: "%s — RBI Solutions",
   },
-  description:
-    "Helping investors and families secure international residency and citizenship through carefully selected investment migration programs across 17 countries.",
+  description: `Helping investors and families secure international residency and citizenship through carefully selected investment migration programs across ${countries.length} countries.`,
   keywords: [
     "residency by investment",
     "citizenship by investment",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: "website",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "RBI Solutions",
     title: "RBI Solutions — Global Residency & Citizenship Advisory",
     description:
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
       "Helping investors and families secure international residency and citizenship through carefully selected investment migration programs.",
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: siteUrl },
+  alternates: { canonical: SITE_URL },
 };
 
 export const viewport: Viewport = {
@@ -74,7 +74,8 @@ const jsonLd = {
   name: "RBI Solutions",
   description:
     "Global residency and citizenship advisory helping investors and families secure international residency through investment migration programs.",
-  url: siteUrl,
+  url: SITE_URL,
+  email: CONTACT_EMAIL,
   areaServed: "Worldwide",
   serviceType: "Investment Migration Advisory",
 };
@@ -91,12 +92,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-ink transition-transform focus:translate-y-0 focus-visible:outline-none"
+        >
+          Skip to main content
+        </a>
         <div className="grain-overlay" />
         <SmoothScroll>
           <Nav />
           {children}
           <Footer />
         </SmoothScroll>
+        <ChatWidget />
       </body>
     </html>
   );

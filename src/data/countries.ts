@@ -509,6 +509,38 @@ export const countries: Country[] = [
     stampShape: "hex",
     scene: "island",
   },
+  {
+    slug: "georgia",
+    name: "Georgia",
+    region: "Caucasus",
+    programKind: "residency",
+    programName: "Investment Residence Permit",
+    tagline: "A strategic gateway between Europe and Asia, built for entrepreneurs.",
+    flagColors: ["#FFFFFF", "#DA291C"],
+    accent: "#7A2131",
+    investmentRoutes: [
+      { label: "Real estate or business investment", amount: "Contact us", currency: "" },
+    ],
+    processingTime: "Contact us for current timelines",
+    minStay: "Contact us for current requirements",
+    familyEligibility: ["Spouse", "Dependent children"],
+    benefits: [
+      "Business & entrepreneur-friendly investment climate",
+      "Real estate investment pathway to residency",
+      "Attractive, low-tax environment",
+      "Fast-growing technology and startup ecosystem",
+    ],
+    lifestyle: "Caucasus peaks, a rising Black Sea capital, and a culture bridging Europe and Asia.",
+    visaFreeAccess: "Residency only — travel privileges follow original citizenship",
+    taxNotes: "Territorial tax system with low rates for qualifying residents",
+    propertyEligible: true,
+    businessEligible: true,
+    stampShape: "shield",
+    scene: "alpine",
+    cta: { label: "Contact Us for Current Requirements", href: "#consultation" },
+    legalDisclaimer:
+      "Georgia's investment residency requirements have changed multiple times in recent years. Figures are intentionally omitted pending verification — contact us for the latest confirmed program terms.",
+  },
 ];
 
 export const getCountry = (slug: string) =>

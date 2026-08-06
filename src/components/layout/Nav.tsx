@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Button from "@/components/ui/Button";
 
 const links = [
   { href: "#programs", label: "Programs" },
   { href: "#how-it-works", label: "How It Works" },
   { href: "#compare", label: "Compare" },
+  { href: "#founder", label: "Founder" },
 ];
 
 export default function Nav() {
@@ -14,7 +16,15 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40);
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setSolid(window.scrollY > 40);
+        ticking = false;
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -23,7 +33,7 @@ export default function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        solid ? "bg-ink/85 backdrop-blur-md border-b border-line" : "bg-transparent"
+        solid ? "bg-ink/95 border-b border-line" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 md:px-12">
@@ -43,12 +53,14 @@ export default function Nav() {
           ))}
         </div>
 
-        <a
+        <Button
           href="#consultation"
-          className="hidden rounded-full border border-gold-dim px-5 py-2 text-sm text-gold transition-colors hover:border-gold hover:bg-gold hover:text-ink md:inline-block"
+          variant="outline"
+          size="sm"
+          className="hidden md:inline-flex"
         >
           Book Consultation
-        </a>
+        </Button>
 
         <button
           aria-label="Toggle menu"
@@ -83,13 +95,15 @@ export default function Nav() {
                 {l.label}
               </a>
             ))}
-            <a
+            <Button
               href="#consultation"
+              variant="outline"
+              size="sm"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full border border-gold-dim px-5 py-2 text-center text-sm text-gold"
+              className="mt-2"
             >
               Book Consultation
-            </a>
+            </Button>
           </div>
         </div>
       )}

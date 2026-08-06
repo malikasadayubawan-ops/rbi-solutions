@@ -5,12 +5,14 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Globe from "./Globe";
 import { cn } from "@/lib/utils";
+import { useInView } from "@/lib/useInView";
 
 interface GlobeCanvasProps {
   activeSlug?: string | null;
   onSelect?: (slug: string) => void;
   interactive?: boolean;
   autoRotate?: boolean;
+  showOffices?: boolean;
   className?: string;
 }
 
@@ -19,14 +21,19 @@ export default function GlobeCanvas({
   onSelect,
   interactive = false,
   autoRotate = true,
+  showOffices = false,
   className,
 }: GlobeCanvasProps) {
+  const { ref, inView } = useInView<HTMLDivElement>("30% 0px");
+
   return (
-    <div className={cn("relative", className)}>
+    <div ref={ref} className={cn("relative", className)}>
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={[1, 1.5]}
         camera={{ position: [0, 0.4, 5.6], fov: 42 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
+        performance={{ min: 0.5 }}
+        frameloop={inView ? "always" : "never"}
       >
         <ambientLight intensity={0.85} />
         <directionalLight position={[4, 3, 5]} intensity={2.2} color="#f1e9d8" />
@@ -37,6 +44,7 @@ export default function GlobeCanvas({
             onSelect={onSelect}
             interactive={interactive}
             autoRotate={autoRotate}
+            showOffices={showOffices}
           />
         </Suspense>
         {interactive && (

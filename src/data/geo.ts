@@ -16,6 +16,7 @@ export const coordinates: Record<string, [number, number]> = {
   grenada: [12.1, -61.7],
   "st-kitts-and-nevis": [17.3, -62.7],
   vanuatu: [-15.4, 166.9],
+  georgia: [41.7, 44.8],
 };
 
 export function latLonToVector3(lat: number, lon: number, radius: number): [number, number, number] {
