@@ -135,9 +135,24 @@ export default function CountryNav() {
               }`}
             >
               <span className="flex h-3.5 w-3.5 overflow-hidden rounded-full ring-1 ring-black/5">
-                {c.flagColors.slice(0, 3).map((color, i) => (
-                  <span key={i} className="h-full flex-1" style={{ background: color }} />
-                ))}
+                {c.slug === "uae" ? (
+                  // The UAE flag isn't a simple N-way stripe pattern like
+                  // the other flags here (equal vertical bands) — it's a
+                  // red band plus three horizontal stripes — so it can't
+                  // be produced by mapping flagColors into equal-width
+                  // slices without silently losing the red. Drawn directly
+                  // instead, just for this one flag.
+                  <svg viewBox="0 0 4 3" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
+                    <rect x="0" y="0" width="4" height="1" fill="#00732F" />
+                    <rect x="0" y="1" width="4" height="1" fill="#FFFFFF" />
+                    <rect x="0" y="2" width="4" height="1" fill="#000000" />
+                    <rect x="0" y="0" width="1" height="3" fill="#FF0000" />
+                  </svg>
+                ) : (
+                  c.flagColors.slice(0, 3).map((color, i) => (
+                    <span key={i} className="h-full flex-1" style={{ background: color }} />
+                  ))
+                )}
               </span>
               {c.name}
             </button>
