@@ -29,12 +29,12 @@ export const offices: Office[] = [
     blurb: "Supporting Latin American investors across residency and citizenship pathways.",
   },
   {
-    city: "Karachi",
+    city: "Islamabad",
     country: "Pakistan",
     isoCode: "PK",
-    lat: 24.86,
-    lon: 67.01,
-    blurb: "Advising South Asian families on global mobility and investment structuring.",
+    lat: 33.68,
+    lon: 73.05,
+    blurb: "Advising South Asian families on global mobility, residency, citizenship, and investment structuring.",
   },
   {
     city: "London",

@@ -85,14 +85,61 @@ export default function PassportCard({ country, index, total }: PassportCardProp
           "-=0.1",
         );
 
-      // Stays fully closed while the card is entering the screen; the
-      // reveal only begins once the passport is roughly centered (its own
-      // center crossing the viewport's center), and it closes again — both
-      // if the user continues on to the next country, or scrolls back up.
+      // The passport is deliberately NOT pinned (see note above) — it
+      // keeps scrolling with the page for the whole time it's "open", so
+      // its on-screen position drifts continuously rather than holding
+      // still. That makes the size of the open *window* (start→end) the
+      // real lever for "never cut off at top": too wide, like the
+      // previous "center top" (~half a viewport of continued scroll), and
+      // a normal scroll gesture carries the still-"open" card's top edge
+      // well past the fixed header before the reveal reverses.
+      //
+      // Both bounds are recomputed on every ScrollTrigger.refresh() (load,
+      // resize, and the image-load refresh in SmoothScroll.tsx) from the
+      // actual viewport height, the passport's own CSS-derived size, and
+      // the fixed header's real height — never a fixed pixel guess, so it
+      // stays correct from small laptops to large monitors.
+      //
+      // - `start` fires a touch before mathematical center (offset by
+      //   half the header height) so the settled position already clears
+      //   the header, rather than landing flush against it.
+      // - `end` is capped so continued scrolling can only carry the card
+      //   up by however much headroom it actually has (plus that same
+      //   start bias) before the reveal closes again — the card is
+      //   guaranteed to still be fully below the header for the entire
+      //   time it reads as "open".
+      const headerHeight = () =>
+        document.querySelector("header")?.getBoundingClientRect().height ?? 0;
+
+      // Mirrors the CSS `width: min(88vw, calc(78svh * 5/7), 500px)` /
+      // `aspect-[5/7]` on passportRef — computed from viewport dimensions
+      // rather than measured off the element, since GSAP's rest-state
+      // `scale: 0.96` would otherwise shrink the *visual* bounding box
+      // slightly below the card's true CSS size.
+      const passportHeight = () => {
+        const width = Math.min(
+          0.88 * window.innerWidth,
+          ((0.78 * window.innerHeight) * 5) / 7,
+          500,
+        );
+        return (width * 7) / 5;
+      };
+
+      const toCenterOffset = (px: number) => {
+        const rounded = Math.round(px);
+        return `center center${rounded >= 0 ? "+=" : "-="}${Math.abs(rounded)}`;
+      };
+
       ScrollTrigger.create({
         trigger: section,
-        start: "center center",
-        end: "center top",
+        start: () => toCenterOffset(-headerHeight() / 2),
+        end: () => {
+          const bias = headerHeight() / 2;
+          const topMargin = (window.innerHeight - passportHeight()) / 2;
+          const topSlack = Math.max(0, topMargin - headerHeight());
+          const activeWindow = Math.max(24, (topSlack + bias) * 0.85);
+          return toCenterOffset(activeWindow - bias);
+        },
         toggleActions: "play reverse play reverse",
         animation: tl,
       });
@@ -112,7 +159,7 @@ export default function PassportCard({ country, index, total }: PassportCardProp
     <section
       ref={sectionRef}
       id={`country-${country.slug}`}
-      className="relative flex min-h-[100svh] w-full flex-col justify-center overflow-hidden bg-paper py-10 md:py-16"
+      className="relative flex min-h-[100svh] w-full scroll-mt-16 flex-col justify-center overflow-hidden bg-paper py-10 md:scroll-mt-[76px] md:py-16"
       style={{ contentVisibility: "auto", containIntrinsicSize: "100vw 100svh" }}
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 pb-6 md:px-14 md:pb-8">

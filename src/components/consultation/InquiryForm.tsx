@@ -6,6 +6,8 @@ import { dialCodes } from "@/data/dialCodes";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import Button from "@/components/ui/Button";
 
+type Status = "idle" | "sending" | "success" | "error";
+
 // Deliberately excludes width so every call site sets its own — mixing a
 // shared `w-full` with a per-instance width override (e.g. the dial-code
 // select) is a real Tailwind footgun: both are separate utility classes
@@ -19,32 +21,36 @@ const labelClasses = "text-xs uppercase tracking-[0.2em] text-brand-dim";
 
 export default function InquiryForm() {
   const formId = useId();
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
-    const dialCode = String(data.get("dialCode") ?? "");
-    const phoneNumber = String(data.get("phoneNumber") ?? "");
-    const interest = String(data.get("interest") ?? "General inquiry");
-    const message = String(data.get("message") ?? "");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      dialCode: String(data.get("dialCode") ?? ""),
+      phoneNumber: String(data.get("phoneNumber") ?? ""),
+      interest: String(data.get("interest") ?? "General inquiry"),
+      message: String(data.get("message") ?? ""),
+    };
 
-    const subject = `Consultation Request — ${interest}`;
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Phone: ${dialCode} ${phoneNumber}`,
-      `Program of interest: ${interest}`,
-      "",
-      message,
-    ].join("\n");
-
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-    setSubmitted(true);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setStatus("success");
+      form.reset();
+    } catch {
+      // Deliberately leaves the form's entered values untouched — the user
+      // shouldn't have to retype everything after a failed send.
+      setStatus("error");
+    }
   };
 
   return (
@@ -146,13 +152,24 @@ export default function InquiryForm() {
       </div>
 
       <div className="mt-7 flex flex-col items-center gap-3">
-        <Button type="submit" variant="solid" size="lg" className="w-full sm:w-auto">
-          Send Inquiry
+        <Button
+          type="submit"
+          variant="solid"
+          size="lg"
+          className="w-full sm:w-auto"
+          disabled={status === "sending"}
+        >
+          {status === "sending" ? "Sending…" : "Send Inquiry"}
         </Button>
-        <p className="text-xs text-ink-dim/60">
-          {submitted
-            ? "Opening your email client — thank you."
-            : `Opens your email client, addressed directly to ${CONTACT_EMAIL}.`}
+        <p
+          className={`text-xs ${status === "error" ? "text-red-600" : "text-ink-dim/60"}`}
+          role={status === "success" || status === "error" ? "status" : undefined}
+        >
+          {status === "success"
+            ? "Thank you. Your inquiry has been received. Our team will contact you shortly."
+            : status === "error"
+              ? "We couldn't send your inquiry. Please try again."
+              : `Sent directly to our team at ${CONTACT_EMAIL}.`}
         </p>
       </div>
     </form>
