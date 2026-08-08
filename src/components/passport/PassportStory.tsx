@@ -33,16 +33,25 @@ export default function PassportStory() {
         <div className="mt-10 h-14 w-px bg-gradient-to-b from-brand to-transparent" />
       </div>
 
-      <CountryNav />
+      {/*
+        A single sentinel spanning every passport card (but not the intro
+        copy above it) — CountryNav observes this one element to decide
+        whether it's inside the Passport Programs section, instead of
+        unioning per-card IntersectionObserver entries, which proved
+        unreliable across large programmatic scroll jumps.
+      */}
+      <div id="passport-cards">
+        <CountryNav />
 
-      {resolved.map((country, i) => (
-        <PassportCard
-          key={country.slug}
-          country={country}
-          index={i}
-          total={countries.length}
-        />
-      ))}
+        {resolved.map((country, i) => (
+          <PassportCard
+            key={country.slug}
+            country={country}
+            index={i}
+            total={countries.length}
+          />
+        ))}
+      </div>
     </div>
   );
 }

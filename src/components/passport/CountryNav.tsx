@@ -9,6 +9,11 @@ function scrollToCountry(slug: string) {
 
 export default function CountryNav() {
   const [active, setActive] = useState<string | null>(null);
+  // Whether any passport card is currently in the viewport — the proxy for
+  // "user is inside the Passport Programs section", deliberately excluding
+  // the intro copy above the cards so the bar only appears once there's
+  // actually something to navigate between.
+  const [regionVisible, setRegionVisible] = useState(false);
   const railRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -18,7 +23,7 @@ export default function CountryNav() {
 
     if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(
+    const activeObserver = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
@@ -28,12 +33,35 @@ export default function CountryNav() {
       { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
 
-    sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    sections.forEach((el) => activeObserver.observe(el));
+
+    // A separate observer on a single sentinel spanning every card (but
+    // not the intro copy above them) drives show/hide — simpler and more
+    // reliable than unioning per-card entries, which could drift out of
+    // sync across a single large programmatic scroll jump.
+    let visibilityObserver: IntersectionObserver | undefined;
+    const region = document.getElementById("passport-cards");
+    if (region) {
+      visibilityObserver = new IntersectionObserver(
+        ([entry]) => setRegionVisible(entry.isIntersecting),
+        { threshold: 0 },
+      );
+      visibilityObserver.observe(region);
+    }
+
+    return () => {
+      activeObserver.disconnect();
+      visibilityObserver?.disconnect();
+    };
   }, []);
 
   return (
-    <div className="sticky top-[64px] z-40 border-b border-line bg-paper/90 backdrop-blur-md md:top-[76px]">
+    <div
+      aria-hidden={!regionVisible}
+      className={`nav-fade sticky top-[64px] z-40 border-b border-line bg-paper/90 backdrop-blur-md md:top-[76px] ${
+        regionVisible ? "nav-fade-visible" : ""
+      }`}
+    >
       <div
         ref={railRef}
         className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-10"

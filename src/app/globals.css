@@ -113,6 +113,34 @@ body {
   text-wrap: balance;
 }
 
+/* Country nav bar: fades/slides in only while the user is inside the
+   Passport Programs section. `visibility` is delayed on the way out (but
+   instant on the way in) so the bar finishes its fade before it's removed
+   from the accessibility tree/layout — a pure-CSS way to sequence that
+   without relying on JS frame timing (requestAnimationFrame is throttled
+   or paused in background/inactive tabs, which made a JS-driven version of
+   this flaky). Not display:none, since sticky elements' normal-flow slot
+   doesn't displace surrounding content either way, but visibility:hidden
+   still fully removes it from layout-affecting interaction and a11y. */
+.nav-fade {
+  opacity: 0;
+  transform: translateY(-12px);
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0s linear 0.35s;
+}
+.nav-fade-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0s linear 0s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
