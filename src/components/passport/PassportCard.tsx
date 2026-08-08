@@ -85,45 +85,27 @@ export default function PassportCard({ country, index, total }: PassportCardProp
           "-=0.1",
         );
 
-      // The passport is deliberately NOT pinned (see note above) — it
-      // keeps scrolling with the page for the whole time it's "open", so
-      // its on-screen position drifts continuously rather than holding
-      // still. That makes the size of the open *window* (start→end) the
-      // real lever for "never cut off at top": too wide, like the
-      // previous "center top" (~half a viewport of continued scroll), and
-      // a normal scroll gesture carries the still-"open" card's top edge
-      // well past the fixed header before the reveal reverses.
-      //
-      // Both bounds are recomputed on every ScrollTrigger.refresh() (load,
-      // resize, and the image-load refresh in SmoothScroll.tsx) from the
-      // actual viewport height, the passport's own CSS-derived size, and
-      // the fixed header's real height — never a fixed pixel guess, so it
-      // stays correct from small laptops to large monitors.
-      //
-      // - `start` fires a touch before mathematical center (offset by
-      //   half the header height) so the settled position already clears
-      //   the header, rather than landing flush against it.
-      // - `end` is capped so continued scrolling can only carry the card
-      //   up by however much headroom it actually has (plus that same
-      //   start bias) before the reveal closes again — the card is
-      //   guaranteed to still be fully below the header for the entire
-      //   time it reads as "open".
+      // Briefly pinned — a deliberate, narrowly-scoped change from the
+      // previous non-pinned approach. Without a pin, the card keeps
+      // scrolling with the page for the entire time it's "open", so
+      // guaranteeing its top edge never reaches the fixed header meant
+      // shrinking the open *window* down to as little as ~24–60px on
+      // shorter viewports (whatever headroom was actually available
+      // before the drifting card would reach the header). A window that
+      // narrow is crossed almost instantly by a normal scroll gesture,
+      // so in practice the reveal could fire and immediately reverse
+      // before it ever became visible — reading as the passport cards
+      // having disappeared, which is the actual bug being fixed here.
+      // Pinning removes the drift entirely: position is locked the
+      // instant the reveal starts, so there's no clipping/timing
+      // trade-off left to make. The pin lasts only ~40% of one viewport
+      // height (responsive, not a fixed pixel count) — long enough for
+      // the ~0.8s reveal to reliably finish even under a fast scroll,
+      // brief enough that it reads as a short settle rather than a
+      // scroll-jack; every other section keeps scrolling exactly as
+      // before.
       const headerHeight = () =>
         document.querySelector("header")?.getBoundingClientRect().height ?? 0;
-
-      // Mirrors the CSS `width: min(88vw, calc(78svh * 5/7), 500px)` /
-      // `aspect-[5/7]` on passportRef — computed from viewport dimensions
-      // rather than measured off the element, since GSAP's rest-state
-      // `scale: 0.96` would otherwise shrink the *visual* bounding box
-      // slightly below the card's true CSS size.
-      const passportHeight = () => {
-        const width = Math.min(
-          0.88 * window.innerWidth,
-          ((0.78 * window.innerHeight) * 5) / 7,
-          500,
-        );
-        return (width * 7) / 5;
-      };
 
       const toCenterOffset = (px: number) => {
         const rounded = Math.round(px);
@@ -132,14 +114,14 @@ export default function PassportCard({ country, index, total }: PassportCardProp
 
       ScrollTrigger.create({
         trigger: section,
+        pin: true,
+        pinSpacing: true,
+        // Fires a touch before mathematical center (offset by half the
+        // header height) so the pinned position already clears the fixed
+        // header instead of landing flush against it.
         start: () => toCenterOffset(-headerHeight() / 2),
-        end: () => {
-          const bias = headerHeight() / 2;
-          const topMargin = (window.innerHeight - passportHeight()) / 2;
-          const topSlack = Math.max(0, topMargin - headerHeight());
-          const activeWindow = Math.max(24, (topSlack + bias) * 0.85);
-          return toCenterOffset(activeWindow - bias);
-        },
+        end: () => `+=${Math.round(window.innerHeight * 0.4)}`,
+        scrub: false,
         toggleActions: "play reverse play reverse",
         animation: tl,
       });
