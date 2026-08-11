@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "rbi-solutions-dev",
-      "runtimeExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
+      "runtimeExecutable": "C:\\Users\\j\\AppData\\Local\\nvm\\v20.20.2\\npm.cmd",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
     }

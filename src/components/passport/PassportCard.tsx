@@ -50,10 +50,10 @@ export default function PassportCard({ country, index, total }: PassportCardProp
         if (coverRef.current) coverRef.current.style.willChange = value;
       };
 
-      // No pin, no scrub: the passport plays a short, fixed-duration reveal
-      // once when it enters the viewport, and reverses on the way back up.
-      // Scroll speed and animation speed are fully decoupled, so a normal
-      // scroll/wheel gesture is never held hostage by the animation.
+      // The passport plays a short, fixed-duration reveal once when it
+      // enters the viewport, and reverses on the way back up. Scroll speed
+      // and animation speed are fully decoupled, so a normal scroll/wheel
+      // gesture is never held hostage by the animation.
       const tl = gsap.timeline({
         paused: true,
         onStart: () => setWillChange(true),
@@ -85,25 +85,6 @@ export default function PassportCard({ country, index, total }: PassportCardProp
           "-=0.1",
         );
 
-      // Briefly pinned — a deliberate, narrowly-scoped change from the
-      // previous non-pinned approach. Without a pin, the card keeps
-      // scrolling with the page for the entire time it's "open", so
-      // guaranteeing its top edge never reaches the fixed header meant
-      // shrinking the open *window* down to as little as ~24–60px on
-      // shorter viewports (whatever headroom was actually available
-      // before the drifting card would reach the header). A window that
-      // narrow is crossed almost instantly by a normal scroll gesture,
-      // so in practice the reveal could fire and immediately reverse
-      // before it ever became visible — reading as the passport cards
-      // having disappeared, which is the actual bug being fixed here.
-      // Pinning removes the drift entirely: position is locked the
-      // instant the reveal starts, so there's no clipping/timing
-      // trade-off left to make. The pin lasts only ~40% of one viewport
-      // height (responsive, not a fixed pixel count) — long enough for
-      // the ~0.8s reveal to reliably finish even under a fast scroll,
-      // brief enough that it reads as a short settle rather than a
-      // scroll-jack; every other section keeps scrolling exactly as
-      // before.
       const headerHeight = () =>
         document.querySelector("header")?.getBoundingClientRect().height ?? 0;
 
@@ -112,15 +93,102 @@ export default function PassportCard({ country, index, total }: PassportCardProp
         return `center center${rounded >= 0 ? "+=" : "-="}${Math.abs(rounded)}`;
       };
 
+      // Sums the offsetTop chain up to the document root — the passport
+      // box's true layout position, deliberately NOT read via
+      // getBoundingClientRect(). GSAP's `gsap.set(passportRef.current, {
+      // xPercent: 14, rotateZ: 2, scale: 0.96 })` above applies before this
+      // runs, and empirically ScrollTrigger's own "center center" measures
+      // the trigger element post-transform — that closed-state rotate/
+      // scale/shift skewed its computed "center" by an amount that varied
+      // per viewport, which was the actual, confirmed (not theoretical)
+      // cause of the mobile reveal opening under the header. offsetTop is
+      // a pure layout property, unaffected by CSS transforms, so it isn't
+      // exposed to that skew.
+      const documentTop = (el: HTMLElement) => {
+        let y = 0;
+        let node: HTMLElement | null = el;
+        while (node) {
+          y += node.offsetTop;
+          node = node.offsetParent as HTMLElement | null;
+        }
+        return y;
+      };
+
+      // The absolute scrollY at which the passport box's own center would
+      // land exactly on the viewport's center.
+      const centeredScrollY = () => {
+        const el = passportRef.current;
+        if (!el) return 0;
+        return documentTop(el) + el.offsetHeight / 2 - window.innerHeight / 2;
+      };
+
+      // Desktop/tablet (matches the grid's own `lg:grid-cols-2` breakpoint,
+      // where the map sits beside rather than below the passport): briefly
+      // pinned so the reveal always settles at a guaranteed, header-clear
+      // position regardless of scroll speed — see the size-vs-window
+      // trade-off this solves in the mobile branch below, which pinning
+      // sidesteps entirely by locking position instead. The pin lasts only
+      // ~40% of one viewport height (responsive, not a fixed pixel count).
+      //
+      // Mobile: deliberately NOT pinned. GSAP's pin uses `position: fixed`
+      // under the hood, and on mobile browsers the visual viewport height
+      // shifts as the address bar shows/hides mid-scroll — a well-known
+      // source of pinned content drifting out of sync with the page and
+      // ending up under the fixed header. Below the same `lg` breakpoint,
+      // positioning is left entirely to plain CSS (`justify-center` on the
+      // section) instead, so there's no `position: fixed` and no
+      // JS-computed viewport math to fall out of sync with the browser's
+      // own chrome. To still guarantee the header is never crossed while
+      // the card reads as "open" — since without a pin the card keeps
+      // scrolling with the page for that whole window — the reveal's
+      // active window is capped to whatever headroom is actually
+      // available (mirroring the desktop-pre-pin approach), rather than
+      // the wide ~half-viewport default.
+      //
+      // Read once at mount rather than re-checked on every refresh: `pin`
+      // itself is a static GSAP option (can't be a function like start/end
+      // can), so if a live resize crossed the breakpoint mid-session and
+      // `end` picked a different branch than `pin` was set up with, the
+      // two would disagree. Freezing both to whatever mode the card
+      // opened in keeps them self-consistent; the trade-off is that
+      // rotating a phone or resizing a desktop window across 1024px won't
+      // retroactively switch an already-mounted card's mode, which
+      // resolves itself on the next navigation/reload.
+      const desktopLayout = window.matchMedia("(min-width: 1024px)").matches;
+
+      // Mobile triggers off the passport box itself, not the section.
+      // "center center" measures the *trigger element's* center against
+      // the viewport's — using `section` (which also contains the
+      // info-row above the passport+map grid) meant that point landed
+      // nowhere near where the box actually renders on screen, by a
+      // content-dependent margin measured (on one real layout) at ~190px.
+      // Desktop tolerates that slop because its viewports are tall enough
+      // to absorb it; on mobile it silently ate the entire header-clearance
+      // budget my bias math assumed it had. Triggering off the box removes
+      // the indirection instead of trying to model it.
+      const triggerEl = desktopLayout ? section : passportRef.current;
+
       ScrollTrigger.create({
-        trigger: section,
-        pin: true,
+        trigger: triggerEl,
+        pin: desktopLayout,
         pinSpacing: true,
-        // Fires a touch before mathematical center (offset by half the
-        // header height) so the pinned position already clears the fixed
-        // header instead of landing flush against it.
-        start: () => toCenterOffset(-headerHeight() / 2),
-        end: () => `+=${Math.round(window.innerHeight * 0.4)}`,
+        start: () => {
+          if (desktopLayout) return toCenterOffset(-headerHeight() / 2);
+          const bias = headerHeight() / 2;
+          return Math.max(0, Math.round(centeredScrollY() - bias));
+        },
+        end: () => {
+          if (desktopLayout) {
+            return `+=${Math.round(window.innerHeight * 0.4)}`;
+          }
+          const bias = headerHeight() / 2;
+          const el = passportRef.current;
+          const boxHeight = el?.offsetHeight ?? 0;
+          const topMargin = (window.innerHeight - boxHeight) / 2;
+          const topSlack = Math.max(0, topMargin - headerHeight());
+          const activeWindow = Math.max(24, (topSlack + bias) * 0.85);
+          return Math.max(0, Math.round(centeredScrollY() - bias + activeWindow));
+        },
         scrub: false,
         toggleActions: "play reverse play reverse",
         animation: tl,
