@@ -2,12 +2,10 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { CONTACT_EMAIL } from "@/lib/constants";
 
-// Resend requires the API key to belong to a verified sending domain for
-// the `from` address; onboarding@resend.dev works out of the box for
-// testing without any domain verification, but should be swapped to a
-// verified rbis.global address (via RESEND_FROM_EMAIL) before going live —
-// see the deployment notes in the PR/chat for exact setup steps.
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "RBI Solutions <onboarding@resend.dev>";
+// rbis.global is verified in Resend, so this is a real, deliverable sender
+// by default — RESEND_FROM_EMAIL remains available as an override (e.g. a
+// different verified rbis.global address) but no longer needs to be set.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "RBI Solutions Website <website@rbis.global>";
 
 interface InquiryPayload {
   name?: string;
@@ -105,8 +103,11 @@ export async function POST(request: Request) {
     });
 
     if (error) {
+      // Logs the actual Resend error server-side (visible in Hostinger's
+      // app logs) for debugging — `error` is Resend's { name, message }
+      // shape, never the API key itself, so this is safe to log in full.
       console.error("Resend send error:", error);
-      return NextResponse.json({ ok: false, error: "Failed to send inquiry." }, { status: 502 });
+      return NextResponse.json({ ok: false, error: "Failed to send inquiry." }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true });
