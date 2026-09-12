@@ -162,7 +162,9 @@ export default function ProgramPage({ country }: Props) {
           <p className="text-xs uppercase tracking-[0.3em] text-brand">Outcome</p>
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="rounded-lg border border-line bg-card p-6">
-              <p className="text-xs uppercase tracking-[0.15em] text-ink-dim">Residence Status Granted</p>
+              <p className="text-xs uppercase tracking-[0.15em] text-ink-dim">
+                {country.programKind === "citizenship" ? "Citizenship Status" : "Residence Status Granted"}
+              </p>
               <p className="mt-2 font-display text-lg italic text-ink">{country.residenceType}</p>
             </div>
             <div className="rounded-lg border border-line bg-card p-6">
