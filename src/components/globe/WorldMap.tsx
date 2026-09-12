@@ -1,14 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { countries } from "@/data/countries";
 import { offices } from "@/data/offices";
 import { coordinates, latLonToXY } from "@/data/geo";
 import { continents } from "@/data/continents";
-
-function scrollToCountry(slug: string) {
-  document.getElementById(`country-${slug}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+import { ClockIcon, CoinsIcon } from "@/components/ui/Icons";
 
 // Rounded to 2dp so SSR and client hydration produce byte-identical strings
 // — trig functions can differ in their last floating-point digit between
@@ -35,11 +33,14 @@ function generateDots(cx: number, cy: number, rx: number, ry: number, count: num
 
 export default function WorldMap() {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
 
   const dots = useMemo(
     () => continents.flatMap((c) => generateDots(c.cx, c.cy, c.rx, c.ry, 130)),
     [],
   );
+
+  const selectedCountry = countries.find((c) => c.slug === selected);
 
   return (
     <section className="relative overflow-hidden bg-paper px-6 py-28 md:px-14">
@@ -50,7 +51,7 @@ export default function WorldMap() {
         </h2>
         <p className="mt-6 text-sm text-ink-dim md:text-base">
           Every marker is a program we advise on or a regional office. Hover
-          to preview, select to fly there directly.
+          to preview, select to see program details.
         </p>
       </div>
 
@@ -65,25 +66,33 @@ export default function WorldMap() {
               const [lat, lon] = coordinates[c.slug];
               const [x, y] = latLonToXY(lat, lon);
               const isHovered = hovered === c.slug;
+              const isSelected = selected === c.slug;
               return (
                 <g
                   key={c.slug}
                   className="cursor-pointer"
                   onMouseEnter={() => setHovered(c.slug)}
                   onMouseLeave={() => setHovered((h) => (h === c.slug ? null : h))}
-                  onClick={() => scrollToCountry(c.slug)}
+                  onClick={() => setSelected((s) => (s === c.slug ? null : c.slug))}
                 >
-                  <circle cx={x} cy={y} r={isHovered ? 9 : 5} fill="var(--color-brand)" opacity={0.15} className="transition-all duration-300" />
                   <circle
                     cx={x}
                     cy={y}
-                    r={isHovered ? 5.5 : 3.5}
+                    r={isHovered || isSelected ? 9 : 5}
+                    fill="var(--color-brand)"
+                    opacity={isSelected ? 0.28 : 0.15}
+                    className="transition-all duration-300"
+                  />
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r={isHovered || isSelected ? 5.5 : 3.5}
                     fill="var(--color-brand)"
                     stroke="white"
                     strokeWidth={1.2}
                     className="transition-all duration-300"
                   />
-                  {isHovered && (
+                  {isHovered && !isSelected && (
                     <g className="transition-opacity duration-200">
                       <rect
                         x={x + 10}
@@ -142,19 +151,47 @@ export default function WorldMap() {
             <span className="h-2.5 w-2.5 rotate-45 bg-emerald" /> Regional office
           </span>
         </div>
+
+        {selectedCountry && (
+          <div className="mt-8 flex flex-col items-start gap-5 rounded-xl border border-line bg-card p-6 shadow-[0_20px_40px_-24px_rgba(19,26,36,0.25)] sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-ink-dim">{selectedCountry.region}</p>
+              <h3 className="mt-1 font-display text-xl italic text-ink">{selectedCountry.name}</h3>
+              <p className="mt-0.5 text-sm text-brand">{selectedCountry.programName}</p>
+              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1.5 text-xs text-ink-dim">
+                <span className="flex items-center gap-1.5">
+                  <CoinsIcon className="h-3.5 w-3.5 text-brand-dim" />
+                  <span className="font-mono-figures text-ink">{selectedCountry.startingAmount}</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <ClockIcon className="h-3.5 w-3.5 text-brand-dim" />
+                  <span className="font-mono-figures text-ink">{selectedCountry.processingTime}</span>
+                </span>
+              </div>
+            </div>
+            <Link
+              href={selectedCountry.programPagePath}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-medium text-paper transition-all hover:scale-[1.03] hover:bg-brand-bright active:scale-[0.98]"
+            >
+              Explore Program
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {countries.map((c) => (
           <button
             key={c.slug}
-            onClick={() => scrollToCountry(c.slug)}
+            onClick={() => setSelected((s) => (s === c.slug ? null : c.slug))}
             onMouseEnter={() => setHovered(c.slug)}
             onMouseLeave={() => setHovered((h) => (h === c.slug ? null : h))}
             className={`min-h-11 rounded-md border px-3 py-2.5 text-left text-xs transition-colors md:text-sm ${
-              hovered === c.slug
-                ? "border-brand bg-brand/10 text-brand"
-                : "border-line text-ink-dim hover:border-brand-dim hover:text-ink"
+              selected === c.slug
+                ? "border-brand bg-brand text-paper"
+                : hovered === c.slug
+                  ? "border-brand-dim bg-brand/10 text-brand"
+                  : "border-line text-ink-dim hover:border-brand-dim hover:text-ink"
             }`}
           >
             {c.name}

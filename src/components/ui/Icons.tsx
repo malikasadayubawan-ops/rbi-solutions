@@ -66,3 +66,47 @@ export function MapPinIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function ChecklistIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 6.5 5.5 8 8 5" />
+      <path d="M11 6h9" />
+      <path d="M4 12.5 5.5 14 8 11" />
+      <path d="M11 12h9" />
+      <path d="M4 18.5 5.5 20 8 17" />
+      <path d="M11 18h9" />
+    </svg>
+  );
+}
+
+export function NetworkIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="5" r="2.2" />
+      <circle cx="5" cy="18" r="2.2" />
+      <circle cx="19" cy="18" r="2.2" />
+      <path d="M11 7 6.5 16M13 7l4.5 9M7.2 18h9.6" />
+    </svg>
+  );
+}
+
+export function SupportIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 3.5h9l4.5 4.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" />
+      <path d="M15 3.5V8h4.5" />
+      <path d="M8.5 13.2 10.5 15l4-5" />
+    </svg>
+  );
+}
+
+export function LockIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="5" y="10.5" width="14" height="9.5" rx="1.6" />
+      <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+      <circle cx="12" cy="15" r="1.4" />
+    </svg>
+  );
+}

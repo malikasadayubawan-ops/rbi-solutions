@@ -3,9 +3,17 @@
 import { useMemo, useState } from "react";
 import { countries } from "@/data/countries";
 import { formatFigure } from "@/lib/utils";
-import type { Country } from "@/types/country";
+import type { Country, ProgramCategory } from "@/types/country";
 
 const MAX_SELECTED = 4;
+
+const categoryFilters: { value: ProgramCategory | "all"; label: string }[] = [
+  { value: "all", label: "All Categories" },
+  { value: "citizenship-by-investment", label: "Citizenship by Investment" },
+  { value: "residency-by-investment", label: "Residency by Investment" },
+  { value: "golden-visa-pr", label: "Golden Visa & Permanent Residency" },
+  { value: "work-business-visa", label: "Work & Business Visas" },
+];
 
 function citizenshipPath(country: Country) {
   if (country.programKind === "citizenship") return "Direct — this program grants citizenship";
@@ -32,11 +40,8 @@ const rows: { label: string; render: (c: Country) => string }[] = [
 ];
 
 export default function ComparisonTool() {
-  const [selected, setSelected] = useState<string[]>([
-    "portugal",
-    "uae",
-    "st-kitts-and-nevis",
-  ]);
+  const [selected, setSelected] = useState<string[]>(["brazil", "greece", "uae"]);
+  const [categoryFilter, setCategoryFilter] = useState<ProgramCategory | "all">("all");
 
   const toggle = (slug: string) => {
     setSelected((prev) => {
@@ -49,6 +54,11 @@ export default function ComparisonTool() {
   const selectedCountries = useMemo(
     () => countries.filter((c) => selected.includes(c.slug)),
     [selected],
+  );
+
+  const pickableCountries = useMemo(
+    () => (categoryFilter === "all" ? countries : countries.filter((c) => c.category === categoryFilter)),
+    [categoryFilter],
   );
 
   return (
@@ -67,8 +77,25 @@ export default function ComparisonTool() {
         </p>
       </div>
 
+      <div className="mx-auto mb-6 flex max-w-5xl flex-wrap justify-center gap-2">
+        {categoryFilters.map((f) => (
+          <button
+            key={f.value}
+            onClick={() => setCategoryFilter(f.value)}
+            aria-pressed={categoryFilter === f.value}
+            className={`min-h-9 rounded-full border px-3.5 py-1.5 text-[11px] uppercase tracking-[0.08em] transition-colors md:text-xs ${
+              categoryFilter === f.value
+                ? "border-emerald bg-emerald text-paper"
+                : "border-line text-ink-dim hover:border-emerald/50 hover:text-ink"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       <div className="mx-auto mb-10 flex max-w-5xl flex-wrap justify-center gap-2">
-        {countries.map((c) => {
+        {pickableCountries.map((c) => {
           const active = selected.includes(c.slug);
           return (
             <button

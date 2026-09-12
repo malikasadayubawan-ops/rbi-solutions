@@ -1,14 +1,40 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getGsap } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
 import HeroWorldMap from "./HeroWorldMap";
 
+const rotatingLines = [
+  "Invest in Brazil. Build Your Pathway to Citizenship.",
+  "Secure European Residency with the Greece Golden Visa.",
+  "Build Your Global Base with the UAE Golden Visa.",
+  "Obtain Caribbean Citizenship Through Investment.",
+];
+
+const ROTATE_INTERVAL_MS = 4200;
+
+function useRotatingLine(lines: string[]) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % lines.length);
+    }, ROTATE_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [lines.length]);
+
+  return lines[index];
+}
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const globeWrapRef = useRef<HTMLDivElement>(null);
+  const rotatingLine = useRotatingLine(rotatingLines);
 
   useEffect(() => {
     const { gsap } = getGsap();
@@ -82,9 +108,9 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="text-balance font-display text-4xl font-light leading-[1.1] text-ink sm:text-6xl md:text-7xl"
         >
-          Global Residency &amp;
+          Global Residency.
           <br />
-          <span className="italic text-brand">Citizenship</span> Advisory
+          <span className="italic text-brand">Greater</span> Freedom.
         </motion.h1>
 
         <motion.p
@@ -93,15 +119,35 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.6 }}
           className="mt-8 max-w-xl text-balance text-base leading-relaxed text-ink-dim md:text-lg"
         >
-          Helping investors and families secure international residency
-          through carefully selected investment and immigration programs.
+          Residency, citizenship and international mobility solutions
+          designed around your family, investment goals and future.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.75 }}
+          className="mt-5 h-5"
+        >
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={rotatingLine}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="font-mono-figures text-xs uppercase tracking-[0.12em] text-brand-dim md:text-sm"
+            >
+              {rotatingLine}
+            </motion.p>
+          </AnimatePresence>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.85 }}
-          className="mt-10 flex flex-col gap-4 sm:flex-row"
+          transition={{ duration: 0.9, delay: 0.9 }}
+          className="mt-8 flex flex-col gap-4 sm:flex-row"
         >
           <Button href="#programs" variant="solid" size="md">
             Explore Programs
