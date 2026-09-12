@@ -21,7 +21,7 @@ const processSteps = [
 export default function ProgramPage({ country }: Props) {
   const passportImage = country.passportImage ?? detectImage("passports", country.slug);
   const needsVerification = Boolean(country.legalDisclaimer) &&
-    (country.slug === "greece" || country.slug === "latvia");
+    (country.slug === "greece" || country.slug === "latvia" || country.slug === "saudi-arabia");
 
   return (
     <main id="main-content" tabIndex={-1} className="relative bg-paper focus:outline-none">
@@ -93,6 +93,19 @@ export default function ProgramPage({ country }: Props) {
                 <p className="mt-1.5 font-mono-figures text-lg text-brand-bright">
                   {formatFigure(route.amount, route.currency)}
                 </p>
+                {route.description && (
+                  <p className="mt-2.5 text-xs leading-relaxed text-ink-dim">{route.description}</p>
+                )}
+                {route.details && route.details.length > 0 && (
+                  <ul className="mt-2 flex flex-col gap-1">
+                    {route.details.map((d) => (
+                      <li key={d} className="flex items-start gap-1.5 text-xs text-ink-dim">
+                        <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-brand-dim" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             ))}
             {country.serviceFee && (

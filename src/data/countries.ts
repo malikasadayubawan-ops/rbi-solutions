@@ -60,13 +60,19 @@ export const countries: Country[] = [
     programName: "Citizenship by Investment",
     outcomeLabel: "Direct Citizenship",
     residenceType: "Citizenship (by investment)",
-    startingAmount: "USD 100,000",
+    startingAmount: "USD 100,000–200,000",
     programPagePath: "/citizenship/dominica",
     tagline: "The Caribbean's most efficient passport, from a single contribution.",
     flagColors: ["#006B3F", "#FCD116", "#000000", "#D41C29", "#FFFFFF"],
     accent: "#8B2E2E",
     investmentRoutes: [
-      { label: "Economic Diversification Fund donation", amount: "100,000", currency: "USD" },
+      {
+        label: "Economic Diversification Fund donation",
+        amount: "100,000",
+        currency: "USD",
+        description:
+          "The applicable amount within the USD 100,000–200,000 range depends on the selected investment or contribution route, and on whether the application is for a single applicant or a family.",
+      },
       { label: "Government-approved real estate", amount: "200,000", currency: "USD" },
     ],
     processingTime: "4–6 months",
@@ -86,6 +92,8 @@ export const countries: Country[] = [
     businessEligible: false,
     stampShape: "circle",
     scene: "island",
+    legalDisclaimer:
+      "The starting investment range of USD 100,000–200,000 reflects Dominica's Economic Diversification Fund donation and government-approved real estate routes. The applicable amount depends on the selected investment or contribution route, whether the application is for one applicant or a family, and applicable government, due-diligence, processing, and professional fees. Government thresholds and costs may change and must be confirmed before an application proceeds.",
   },
   {
     slug: "st-kitts-and-nevis",
@@ -177,8 +185,9 @@ export const countries: Country[] = [
     featured: true,
     featuredOrder: 1,
     programName: "Property Investment or Childbirth Residency",
-    outcomeLabel: "Pathway to Citizenship",
-    pathwayToCitizenship: "Pathway to citizenship after 4 years, subject to eligibility",
+    outcomeLabel: "Brazilian Residency with a Potential Pathway to Citizenship",
+    pathwayToCitizenship:
+      "Any future citizenship application remains subject to individual eligibility, physical-presence requirements, government approval, and applicable Brazilian laws.",
     residenceType: "Renewable Residency",
     startingAmount: "USD 150,000",
     programPagePath: "/residency/brazil",
@@ -186,8 +195,19 @@ export const countries: Country[] = [
     flagColors: ["#1E4A3D", "#F0C419", "#0B3D91"],
     accent: "#1E4A3D",
     investmentRoutes: [
-      { label: "Property investment — North/Northeast regions", amount: "700,000", currency: "BRL (~USD 130,000)" },
-      { label: "Property investment — other regions", amount: "1,000,000", currency: "BRL (~USD 185,000)" },
+      {
+        label: "North and Northeast Regions",
+        amount: "From USD 150,000",
+        currency: "",
+        description: "Investment in qualifying property located in Brazil's North and Northeast regions.",
+      },
+      {
+        label: "Major Cities and Markets",
+        amount: "From USD 200,000",
+        currency: "",
+        description: "Investment in qualifying property in major cities and markets, including:",
+        details: ["São Paulo", "Rio de Janeiro", "Santa Catarina"],
+      },
     ],
     serviceFee: { label: "Childbirth Residency Package — RBI Service Fee", amount: "10,000", currency: "USD" },
     processingTime: "4–6 months",
@@ -196,7 +216,7 @@ export const countries: Country[] = [
     benefits: [
       "Largest economy in Latin America",
       "Two qualifying routes: property investment or childbirth residency",
-      "Pathway to citizenship after 4 years",
+      "Potential pathway to citizenship after 4 years, subject to eligibility",
       "Full property and business ownership rights",
     ],
     lifestyle: "Atlantic coastline, financial capital energy, and a culture built on warmth and scale.",
@@ -208,7 +228,7 @@ export const countries: Country[] = [
     stampShape: "circle",
     scene: "coastal",
     legalDisclaimer:
-      "USD 150,000 / USD 200,000 are RBI Solutions' marketing starting points (converted from the qualifying BRL property-investment thresholds below); the government-set thresholds are the BRL figures. Confirm current exchange-adjusted terms before proceeding.",
+      "Brazilian residency is granted through the qualifying investment routes above; any future citizenship application remains subject to individual eligibility, physical-presence requirements, government approval, and applicable Brazilian laws. USD 150,000 and USD 200,000 are RBI Solutions' marketing starting figures, converted from the Brazilian government's BRL-denominated thresholds (BRL 700,000 for North/Northeast regions and BRL 1,000,000 for other regions and major cities/markets) — USD equivalents are approximate and may change with exchange rates. Confirm current terms before proceeding.",
   },
   {
     slug: "azerbaijan",
@@ -358,23 +378,42 @@ export const countries: Country[] = [
     pathwayToCitizenship:
       "Malta's Permanent Residence Programme does not itself grant a defined pathway to citizenship — naturalisation requirements should be confirmed separately with licensed counsel.",
     residenceType: "Permanent Residence (MPRP)",
-    startingAmount: "EUR 375,000",
+    startingAmount: "EUR 150,000",
     programPagePath: "/golden-visas/malta",
     tagline: "The Mediterranean's most direct route to an EU residence — three ways in.",
     flagColors: ["#FFFFFF", "#CF142B"],
     accent: "#8B4A2B",
     investmentRoutes: [
+      {
+        label: "Property Rental Program — Estimated Complete Package",
+        amount: "~150,000",
+        currency: "EUR",
+        description:
+          "Starting from approximately EUR 150,000. This is an estimated overall package cost — not a property purchase price or direct property-investment amount. It may include:",
+        details: [
+          "Qualifying property rental",
+          "Applicable government contributions",
+          "Administrative charges",
+          "Legal fees",
+          "Processing costs",
+        ],
+      },
+      {
+        label: "Property Investment Program — Qualifying Property Purchase",
+        amount: "375,000",
+        currency: "EUR",
+        description: "This route involves a qualifying property purchase, plus:",
+        details: [
+          "Applicable government contributions",
+          "Administrative charges",
+          "Due-diligence charges",
+          "Legal and professional fees",
+          "Other applicable processing costs",
+        ],
+      },
       { label: "Option 1 — Net assets, higher liquidity (held, not spent)", amount: "500,000", currency: "EUR" },
       { label: "Option 1 — Net assets, lower liquidity (held, not spent)", amount: "650,000", currency: "EUR" },
-      { label: "Option 2 — Property purchase", amount: "375,000", currency: "EUR" },
-      { label: "Option 3 — Property rental (annual)", amount: "14,000", currency: "EUR / year" },
     ],
-    serviceFee: {
-      label:
-        "Property Rental Route — Complete Package (estimated total: property rental, government contribution, legal fees, and processing costs — not a property investment amount)",
-      amount: "~150,000",
-      currency: "EUR",
-    },
     processingTime: "12–36 months",
     minStay: "Genuine link to Malta required, minimal physical presence",
     familyEligibility: ["Spouse or partner", "Dependent children", "Parents", "Grandparents"],
@@ -383,6 +422,7 @@ export const countries: Country[] = [
       "Schengen Area and EU freedom of movement",
       "Government-recognised permanent residence status",
       "No requirement to renounce existing citizenship",
+      "Includes the main applicant and qualifying family members, subject to eligibility and government approval",
     ],
     lifestyle: "Limestone harbours, honey-coloured light, and a small island with an outsized history.",
     visaFreeAccess: "Residency only — travel privileges follow original citizenship",
@@ -392,7 +432,7 @@ export const countries: Country[] = [
     stampShape: "hex",
     scene: "coastal",
     legalDisclaimer:
-      "Malta's Permanent Residence Programme (MPRP) grants residency, not direct citizenship. Malta revised its MPRP fee structure in July 2025; published figures vary by source during the transition. The ~EUR 150,000 Property Rental Route figure is an estimated overall package cost — covering property rental, the applicable government contribution, legal fees, and processing costs — and must not be presented as a property investment amount. Confirm current thresholds and the package breakdown before presenting to a client.",
+      "Malta's Permanent Residence Programme (MPRP) grants residency, not citizenship. Malta revised its MPRP fee structure in July 2025; published figures vary by source during the transition. The Property Rental Program's ~EUR 150,000 figure is an estimated overall package cost — covering qualifying property rental, applicable government contributions, administrative charges, legal fees, and processing costs — and must never be presented as a property purchase price or direct property-investment amount. The Property Investment Program involves a genuine property purchase (from EUR 375,000) plus applicable government contributions, administrative charges, due-diligence charges, legal and professional fees, and other processing costs. The program may include the main applicant and qualifying family members, subject to eligibility and government approval. Confirm current thresholds and the full fee breakdown before presenting to a client.",
   },
   {
     slug: "latvia",
@@ -496,8 +536,21 @@ export const countries: Country[] = [
     flagColors: ["#006C35", "#FFFFFF"],
     accent: "#3E4A2A",
     investmentRoutes: [
-      { label: "Permanent premium residency (one-time fee)", amount: "800,000", currency: "SAR" },
-      { label: "Renewable annual residency", amount: "100,000", currency: "SAR / year" },
+      {
+        label: "Unlimited Duration Premium Residency — one-time government fee",
+        amount: "800,000",
+        currency: "SAR",
+        description:
+          "A single, one-time government fee for permanent residency that never needs renewal. This is a government permit fee, not a property-investment amount.",
+      },
+      { label: "Renewable Annual Premium Residency — yearly government fee", amount: "100,000", currency: "SAR / year" },
+      {
+        label: "Real Estate Owner Premium Residency — separate product",
+        amount: "4,000,000",
+        currency: "SAR",
+        description:
+          "A distinct residency product requiring ownership of a qualifying residential property valued at SAR 4,000,000 or more, plus a separate government permit fee.",
+      },
     ],
     processingTime: "30–90 days",
     minStay: "No minimum stay requirement",
@@ -505,7 +558,7 @@ export const countries: Country[] = [
     benefits: [
       "Own property and business without a Saudi sponsor",
       "Enter and exit the Kingdom freely",
-      "Real estate owner and investor categories also available (from SAR 4,000,000)",
+      "Three distinct Premium Residency products — unlimited-duration, renewable annual, and real estate owner",
       "Access to Vision 2030 giga-project economy",
     ],
     lifestyle: "Red Sea coastlines, Najd desert, and a country building at unprecedented scale.",
@@ -515,6 +568,8 @@ export const countries: Country[] = [
     businessEligible: true,
     stampShape: "shield",
     scene: "desert",
+    legalDisclaimer:
+      "NEEDS LEGAL VERIFICATION (SOURCE ACCESS LIMITED). SAR 800,000 is the Kingdom's one-time government fee for Unlimited Duration Premium Residency — a residency permit fee, not a property-investment amount. A separate Renewable Annual Premium Residency costs SAR 100,000 per year. A distinct Real Estate Owner Premium Residency product requires ownership of a qualifying residential property valued at SAR 4,000,000 or more, appraised by an accredited valuer, plus its own separate government permit fee. These figures are corroborated by multiple independent sources describing the Kingdom's official Premium Residency Center program (pr.gov.sa); direct extraction of the live fee schedule from the official portal was not possible during this review due to access restrictions. Confirm current figures directly via pr.gov.sa or with our team before presenting to a client.",
   },
 
   // ---------------------------------------------------------------------
@@ -532,7 +587,7 @@ export const countries: Country[] = [
     outcomeLabel: "Pathway to Settlement",
     pathwayToCitizenship: "Eventual pathway to British citizenship following Indefinite Leave to Remain, subject to eligibility",
     residenceType: "Sponsored Work Visa",
-    startingAmount: "GBP 40,000",
+    startingAmount: "GBP 35,000",
     programPagePath: "/work-visas/united-kingdom",
     tagline: "Sponsored employment, a clear duration, and a defined route to settlement.",
     flagColors: ["#012169", "#FFFFFF", "#C8102E"],
@@ -540,7 +595,7 @@ export const countries: Country[] = [
     investmentRoutes: [
       { label: "Government investment threshold", amount: "None — sponsored work visa", currency: "" },
     ],
-    serviceFee: { label: "RBI Service Fee — Full Application & Sponsorship Support", amount: "40,000", currency: "GBP" },
+    serviceFee: { label: "RBI Service Fee — Full Application & Sponsorship Support", amount: "35,000", currency: "GBP" },
     processingTime: "3–8 weeks",
     minStay: "Continuous residence expected toward settlement",
     familyEligibility: ["Spouse or partner", "Dependent children"],
@@ -571,13 +626,13 @@ export const countries: Country[] = [
     outcomeLabel: "Pathway to Citizenship, subject to eligibility",
     pathwayToCitizenship: "Pathway to citizenship after 5 years, subject to eligibility",
     residenceType: "4-Year Renewable Residence Permit",
-    startingAmount: "EUR 30,000",
+    startingAmount: "EUR 26,000",
     programPagePath: "/business-visas/france",
-    tagline: "A guided path to French residency through business creation — from €30,000.",
+    tagline: "A guided path to French residency through business creation — from €26,000.",
     flagColors: ["#0055A4", "#FFFFFF", "#EF4135"],
     accent: "#22304C",
     investmentRoutes: [
-      { label: "RBI Solutions Business Startup Program — service fee", amount: "From 30,000", currency: "EUR" },
+      { label: "RBI Solutions Business Startup Program — service fee", amount: "From 26,000", currency: "EUR" },
     ],
     processingTime: "4–8 weeks",
     minStay: "6 months every year to maintain residency",
@@ -597,7 +652,7 @@ export const countries: Country[] = [
     stampShape: "circle",
     scene: "urban",
     legalDisclaimer:
-      "The €30,000 figure is RBI Solutions' service fee for guided business-formation and application support, not a mandatory French government investment threshold — France's business-creation residency routes are assessed on the applicant's business plan and viability rather than a fixed capital requirement. Separate French government filing fees apply. Confirm current terms before proceeding.",
+      "The €26,000 figure is RBI Solutions' service fee for guided business-formation and application support, not a mandatory French government investment threshold — France's business-creation residency routes are assessed on the applicant's business plan and viability rather than a fixed capital requirement. Separate French government filing fees apply. Confirm current terms before proceeding.",
   },
   {
     slug: "spain",
@@ -607,18 +662,17 @@ export const countries: Country[] = [
     programKind: "residency",
     category: "work-business-visa",
     displayOrder: 3,
-    programName: "Digital Nomad & Startup Visa Programs",
+    programName: "Startup Visa Program",
     outcomeLabel: "Pathway to Citizenship, subject to eligibility",
     pathwayToCitizenship: "Pathway to citizenship after 10 years (2 years for Ibero-American nationals), subject to eligibility",
-    residenceType: "Renewable Residence Permit (Digital Nomad / Startup)",
-    startingAmount: "EUR 5,000",
+    residenceType: "Renewable Residence Permit (Startup Visa)",
+    startingAmount: "EUR 17,000",
     programPagePath: "/business-visas/spain",
-    tagline: "Spain's real-estate golden visa has closed — two flexible routes remain open.",
+    tagline: "A guided path to Spanish residency through startup formation — from €17,000.",
     flagColors: ["#AA151B", "#F1BF00"],
     accent: "#8A3B2B",
     investmentRoutes: [
-      { label: "Digital Nomad Visa — RBI Solutions service package", amount: "From 5,000", currency: "EUR" },
-      { label: "Startup Visa Program — RBI Solutions service package", amount: "From 13,000", currency: "EUR" },
+      { label: "Startup Visa Program — RBI Solutions service package", amount: "From 17,000", currency: "EUR" },
     ],
     processingTime: "3–6 months",
     minStay: "6 months per year to maintain residency",
@@ -627,7 +681,7 @@ export const countries: Country[] = [
       "Schengen Area access",
       "Path to citizenship after 10 years (2 for Ibero-American nationals)",
       "Access to Spain's public healthcare system",
-      "No fixed Spanish government investment threshold on either route",
+      "No fixed Spanish government investment threshold on this route",
     ],
     lifestyle: "Mediterranean tempo, Madrid's energy, and coastlines built for a second life.",
     visaFreeAccess: "186 destinations visa-free/visa-on-arrival (Henley Passport Index, rank 3, tied)",
@@ -638,7 +692,7 @@ export const countries: Country[] = [
     stampShape: "shield",
     scene: "coastal",
     legalDisclaimer:
-      "Spain's real-estate Golden Visa (previously €500,000) was abolished by law on 3 April 2025 and cannot be offered. The figures above are RBI Solutions' service package starting fees, not mandatory Spanish government investment amounts — the Digital Nomad Visa requires proof of sufficient remote income and the Startup Visa requires an approved business project; neither route sets a fixed capital-investment threshold. Separate Spanish government fees apply. Confirm current eligibility before proceeding.",
+      "Spain's real-estate Golden Visa (previously €500,000) was abolished by law on 3 April 2025 and cannot be offered. The figure above is RBI Solutions' service package starting fee, not a mandatory Spanish government investment amount — the Startup Visa requires an approved business project and does not set a fixed capital-investment threshold. Separate Spanish government fees apply. Confirm current eligibility before proceeding.",
   },
 ];
 

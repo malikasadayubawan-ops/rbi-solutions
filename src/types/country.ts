@@ -29,6 +29,14 @@ export interface InvestmentRoute {
   label: string;
   amount: string;
   currency: string;
+  /** Optional longer explanation shown beneath the label/amount on the
+   * program page — for a route whose figure needs context to avoid
+   * misrepresentation (e.g. clarifying an estimated package cost is not a
+   * property price, or that a USD figure is a converted marketing point). */
+  description?: string;
+  /** Optional bullet list shown under the description — e.g. named example
+   * cities/markets, or an itemized fee breakdown. */
+  details?: string[];
 }
 
 export interface CountryCTA {

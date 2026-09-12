@@ -14,11 +14,13 @@ const signature = [
   {
     slug: "brazil",
     label: "Residency by Property Investment",
-    startingNote: "USD 150,000 for qualifying property in Northern/Northeastern regions",
-    startingNoteSecondary: "USD 200,000 approximate marketing figure for major regions/cities",
-    mainLabel: "Pathway to Citizenship",
+    startingNote: "Investment from USD 150,000 — North and Northeast Regions",
+    startingNoteSecondary: "Investment from USD 200,000 — Major Cities and Markets",
+    mainLabel: "Brazilian Residency with a Potential Pathway to Citizenship",
     benefits: ["Family Eligible", "Property Ownership", "Renewable Residency", "Access to Latin America"],
     cta: "Explore Brazil",
+    legalNote:
+      "Any future citizenship application remains subject to individual eligibility, physical-presence requirements, and government approval.",
     accent: "#1E4A3D",
   },
   {

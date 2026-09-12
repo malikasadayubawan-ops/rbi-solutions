@@ -10,6 +10,6 @@ export interface Founder {
 export const founder: Founder = {
   name: "Malik Asad",
   title: "Founder",
-  bio: "Malik Asad founded RBI Solutions with the vision of helping investors and families navigate global residency and citizenship opportunities through transparent advice and carefully selected investment pathways. Rather than promoting a single destination, the firm focuses on understanding each client's objectives and recommending the most suitable long-term solution through its international network of trusted professionals and partners.",
+  bio: "With more than 12 years of experience across international real estate, banking, investment advisory and residency solutions, Malik Asad brings extensive knowledge of cross-border property transactions and global investment opportunities. He has handled millions of dollars in property sales, with professional experience spanning Dubai, the United Kingdom and Brazil. His personal experience with international residency processes gives him a practical understanding of the financial, legal and relocation considerations faced by globally mobile investors and families. His expertise covers cross-border real estate, international bank deposits, commodity-related investments, residency planning and investment migration. This combination of market knowledge and first-hand international experience enables him to advise clients seeking to diversify their assets, pursue international residency and build a secure global future.",
   portraitSrc: "/founder/malik-asad.jpg",
 };
