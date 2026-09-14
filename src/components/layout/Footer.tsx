@@ -1,4 +1,5 @@
-import { CONTACT_EMAIL } from "@/lib/constants";
+import Link from "next/link";
+import { CONTACT_EMAIL, WHATSAPP_URL } from "@/lib/constants";
 
 export default function Footer() {
   return (
@@ -34,6 +35,19 @@ export default function Footer() {
             <p className="text-xs uppercase tracking-[0.2em] text-brand-dim">Firm</p>
             <ul className="mt-4 space-y-3 text-sm text-ink-dim">
               <li><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-brand">{CONTACT_EMAIL}</a></li>
+              <li>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Contact RBI Solutions on WhatsApp"
+                  className="hover:text-brand"
+                >
+                  WhatsApp
+                </a>
+              </li>
+              <li><Link href="/privacy" className="hover:text-brand">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-brand">Terms &amp; Conditions</Link></li>
               <li className="text-ink-dim">By appointment only</li>
             </ul>
           </div>

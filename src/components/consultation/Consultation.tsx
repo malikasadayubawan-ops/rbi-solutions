@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CONTACT_EMAIL } from "@/lib/constants";
+import { CONTACT_EMAIL, WHATSAPP_URL } from "@/lib/constants";
 import InquiryForm from "./InquiryForm";
 
 export default function Consultation() {
@@ -42,7 +42,18 @@ export default function Consultation() {
           Prefer email directly?{" "}
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-brand hover:text-brand-bright">
             {CONTACT_EMAIL}
+          </a>{" "}
+          or{" "}
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Contact RBI Solutions on WhatsApp"
+            className="text-brand hover:text-brand-bright"
+          >
+            message us on WhatsApp
           </a>
+          .
         </p>
       </motion.div>
     </section>
