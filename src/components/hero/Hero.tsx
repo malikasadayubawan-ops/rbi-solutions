@@ -102,16 +102,21 @@ export default function Hero() {
           Investment Migration Advisory
         </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="text-balance font-display text-4xl font-light leading-[1.1] text-ink sm:text-6xl md:text-7xl"
-        >
+        {/*
+          Deliberately a plain h1, not a motion.h1: this is the page's LCP
+          element (confirmed via Lighthouse's largest-contentful-paint-element
+          audit). Framer Motion's initial={{opacity:0}} entrance pattern used
+          elsewhere on this page hides an element until JS hydrates and the
+          animation runs, which pushed LCP's Render Delay to ~87% of total
+          LCP time. The headline must be visible in the very first paint of
+          the server-rendered HTML, so it keeps no entrance animation while
+          the surrounding elements (eyebrow, subtext, buttons) keep theirs.
+        */}
+        <h1 className="text-balance font-display text-4xl font-light leading-[1.1] text-ink sm:text-6xl md:text-7xl">
           Global Residency.
           <br />
           <span className="italic text-brand">Greater</span> Freedom.
-        </motion.h1>
+        </h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}

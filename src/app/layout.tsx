@@ -9,10 +9,17 @@ import ChatWidget from "@/components/layout/ChatWidget";
 import { countries } from "@/data/countries";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/constants";
 
+// Weights/styles trimmed to what the site actually renders (verified via a
+// project-wide grep for Tailwind font-weight/italic utilities combined with
+// `font-display`): 300 and 400, each in both normal and italic, cover every
+// Fraunces use from the Hero h1 down to program-page headings. 500 and 600
+// were never used — dropping them removes those font files from the build
+// (and from next/font's automatic preload) without touching any rendered
+// text.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400"],
   style: ["normal", "italic"],
   display: "swap",
 });
